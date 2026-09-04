@@ -12,7 +12,7 @@ const quotedRole = `"${role.replaceAll('"', '""')}"`;
 const quotedPassword = `'${password.replaceAll("'", "''")}'`;
 
 try {
-  const existing = await sql<{ exists: boolean }[]>`
+  const existing = await sql`
     select exists(select 1 from pg_roles where rolname = ${role}) as exists
   `;
 
