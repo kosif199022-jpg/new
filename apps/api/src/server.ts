@@ -10,13 +10,18 @@ export interface ServerOptions {
 
 export async function buildServer(options: ServerOptions): Promise<FastifyInstance> {
   const app = Fastify({ logger: options.logger ?? false });
+
   await registerHealthRoutes(app, options.readinessChecks ?? []);
-  await registerContextPlugin(app, options.resolveSession);
-  app.get('/api/session', async (request) => ({
-    tenantId: request.ctx.tenantId,
-    userId: request.ctx.userId,
-    permissions: [...request.ctx.permissions],
-    assurance: request.ctx.assurance ?? 'single_factor'
-  }));
+
+  await app.register(async (protectedApi) => {
+    await registerContextPlugin(protectedApi, options.resolveSession);
+    protectedApi.get('/api/session', async (request) => ({
+      tenantId: request.ctx.tenantId,
+      userId: request.ctx.userId,
+      permissions: [...request.ctx.permissions],
+      assurance: request.ctx.assurance ?? 'single_factor'
+    }));
+  });
+
   return app;
 }
