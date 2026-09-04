@@ -49,3 +49,25 @@ export const journalLines = pgTable('journal_lines', {
   check('journal_lines_nonnegative_ck', sql`${table.debitMinor} >= 0 and ${table.creditMinor} >= 0`),
   check('journal_lines_one_side_ck', sql`((${table.debitMinor} > 0)::int + (${table.creditMinor} > 0)::int) = 1`)
 ]);
+
+export const receivableInvoices = pgTable('receivable_invoices', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  tenantId: uuid('tenant_id').notNull().references(() => tenants.id, { onDelete: 'restrict' }),
+  invoiceNumber: text('invoice_number').notNull(),
+  customerName: text('customer_name').notNull(),
+  currency: text('currency').notNull(),
+  amountMinor: bigint('amount_minor', { mode: 'bigint' }).notNull(),
+  receivableAccountId: uuid('receivable_account_id').notNull().references(() => accounts.id, { onDelete: 'restrict' }),
+  revenueAccountId: uuid('revenue_account_id').notNull().references(() => accounts.id, { onDelete: 'restrict' }),
+  journalId: uuid('journal_id').notNull().references(() => journalEntries.id, { onDelete: 'restrict' }),
+  status: text('status').notNull().default('issued'),
+  issuedBy: uuid('issued_by').notNull().references(() => users.id, { onDelete: 'restrict' }),
+  issuedAt: timestamp('issued_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  correlationId: text('correlation_id').notNull()
+}, (table) => [
+  uniqueIndex('receivable_invoices_tenant_number_uq').on(table.tenantId, table.invoiceNumber),
+  uniqueIndex('receivable_invoices_journal_uq').on(table.journalId),
+  index('receivable_invoices_tenant_issued_idx').on(table.tenantId, table.issuedAt),
+  check('receivable_invoices_amount_positive_ck', sql`${table.amountMinor} > 0`),
+  check('receivable_invoices_status_ck', sql`${table.status} = 'issued'`)
+]);
