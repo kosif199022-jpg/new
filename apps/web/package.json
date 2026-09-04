@@ -9,8 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint src --max-warnings=0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "vitest run",
-    "test:integration": "vitest run --passWithNoTests",
+    "test": "vitest run --exclude 'e2e/**'",
+    "test:integration": "vitest run --exclude 'e2e/**' --passWithNoTests",
     "test:e2e": "playwright test"
   },
   "dependencies": {
