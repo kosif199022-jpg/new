@@ -1,0 +1,33 @@
+:root {
+  --new-font-sans: Inter, "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
+  --new-bg: #07111f;
+  --new-surface: #0d1b2d;
+  --new-surface-raised: #13243a;
+  --new-surface-soft: #102037;
+  --new-text: #f7f9fc;
+  --new-text-muted: #9fb0c7;
+  --new-border: rgba(255, 255, 255, 0.1);
+  --new-primary: #6ee7c8;
+  --new-primary-strong: #33c9a5;
+  --new-warning: #f5c76b;
+  --new-danger: #ff8d8d;
+  --new-info: #7ab8ff;
+  --new-radius-sm: 10px;
+  --new-radius-md: 16px;
+  --new-radius-lg: 24px;
+  --new-space-1: 4px;
+  --new-space-2: 8px;
+  --new-space-3: 12px;
+  --new-space-4: 16px;
+  --new-space-5: 20px;
+  --new-space-6: 24px;
+  --new-space-8: 32px;
+  --new-focus: 0 0 0 3px rgba(110, 231, 200, 0.35);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+:where(button, a, input, select, textarea):focus-visible {
+  outline: none;
+  box-shadow: var(--new-focus);
+}

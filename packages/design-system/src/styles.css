@@ -1,0 +1,27 @@
+@import './tokens.css';
+
+.new-button {
+  min-block-size: 42px;
+  padding-block: 10px;
+  padding-inline: 16px;
+  border: 1px solid transparent;
+  border-radius: var(--new-radius-sm);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+.new-button:hover { transform: translateY(-1px); }
+.new-button--primary { background: var(--new-primary); color: #062119; }
+.new-button--secondary { background: var(--new-surface-raised); color: var(--new-text); border-color: var(--new-border); }
+.new-button--danger { background: rgba(255, 141, 141, 0.14); color: var(--new-danger); border-color: rgba(255, 141, 141, 0.3); }
+
+.new-card {
+  border: 1px solid var(--new-border);
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.015));
+  border-radius: var(--new-radius-md);
+  padding: var(--new-space-5);
+}
+.new-card__eyebrow { color: var(--new-primary); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.04em; }
+.new-card__title { margin-block: var(--new-space-2) var(--new-space-3); color: var(--new-text); font-size: 1.05rem; }
+.new-card__body { color: var(--new-text-muted); }
