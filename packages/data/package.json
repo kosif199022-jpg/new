@@ -17,7 +17,8 @@
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "test:e2e": "vitest run --passWithNoTests",
     "db:generate": "drizzle-kit generate --config drizzle.config.ts",
-    "db:migrate": "node scripts/migrate.mjs"
+    "db:migrate": "node scripts/migrate.mjs",
+    "db:ci-role": "node scripts/create-ci-app-role.mjs"
   },
   "dependencies": {
     "@new/shared": "workspace:*",
