@@ -19,7 +19,8 @@
   },
   "dependencies": {
     "@new/data": "workspace:*",
-    "@new/shared": "workspace:*"
+    "@new/shared": "workspace:*",
+    "drizzle-orm": "^0.45.2"
   },
   "devDependencies": {
     "fast-check": "^4.3.0",
