@@ -285,6 +285,19 @@ Every connector implements common capabilities:
 - GitHub/engineering sources for engineering-council workflows.
 - Cloudflare/edge operations where the deployment uses Cloudflare.
 
+### Initial production connector targets
+The initial broad integration target is explicit so “large integrations” is measurable rather than open-ended:
+- **ERP/accounting:** SAP S/4HANA, Oracle NetSuite, Microsoft Dynamics 365 Business Central, Odoo, QuickBooks Online and Xero through connector adapters.
+- **Cloud documents/storage:** Google Drive, Microsoft OneDrive/SharePoint, Amazon S3-compatible storage and Cloudflare R2.
+- **Email/calendar:** Google Workspace and Microsoft 365 for governed PBC requests, notifications and calendar-linked workflows.
+- **CRM/sales:** Salesforce and HubSpot.
+- **Data platforms:** PostgreSQL, MySQL, Microsoft SQL Server, Snowflake and BigQuery read/sync adapters.
+- **Developer/operations:** GitHub and Cloudflare operational connectors.
+- **Banking:** file adapters (CSV/XLSX/OFX) plus an open-banking connector interface so region/bank-specific providers can be added without changing reconciliation logic.
+- **AI:** OpenAI, Anthropic, Gemini and OpenAI-compatible local/private endpoints.
+
+Connector availability is configuration-dependent; the platform must degrade cleanly when credentials or a provider are absent.
+
 ### MCP
 - Native MCP server exposing explicitly governed KOSIF tools.
 - MCP client for approved external servers.
@@ -383,7 +396,7 @@ The complete scope is large, so implementation is sliced without removing reques
 5. **AI/knowledge:** provider registry, governance, parsers, retrieval, citations.
 6. **Council:** blind rounds, matrix, challenge rounds, human decision evidence.
 7. **Voice:** realtime advisor, transcript governance, TTS/reader fallback.
-8. **Enterprise integrations:** connector SDK, MCP, OAuth, browser agent, priority connectors.
+8. **Enterprise integrations:** connector SDK, MCP, OAuth, browser agent, the explicit initial production connector targets above.
 9. **Operational hardening:** security, retention/legal hold, performance, cost controls, disaster recovery and production smoke suites.
 
 These slices are implementation order only. The product target remains the full capability set described in this specification.
