@@ -31,7 +31,7 @@ export function App({ locale: initialLocale = 'ar' }: { locale?: Locale }) {
       </header>
 
       <section className="hero-grid" aria-label={locale === 'ar' ? 'ملخص المنصة' : 'Platform summary'}>
-        <Card eyebrow={locale === 'ar' ? 'حالة المنصة' : 'Platform state'} title={locale === 'ar' ? 'أساس موحّد، صلاحيات واضحة' : 'One foundation, explicit authority'} className="hero-card hero-card--primary">
+        <Card eyebrow={locale === 'ar' ? 'حالة المنصة' : 'Platform state'} heading={locale === 'ar' ? 'أساس موحّد، صلاحيات واضحة' : 'One foundation, explicit authority'} className="hero-card hero-card--primary">
           <p>{locale === 'ar' ? 'كل عملية مؤثرة تمر عبر tenant وصلاحية وسجل أثر. الذكاء الاصطناعي يقترح ويشرح؛ الإنسان يعتمد.' : 'Every material action is tenant-scoped, authorized and traceable. AI proposes and explains; humans approve.'}</p>
           <div className="status-row">
             <span className="status-pill status-pill--ok">{locale === 'ar' ? 'RTL أصلي' : 'Native RTL'}</span>
@@ -39,14 +39,14 @@ export function App({ locale: initialLocale = 'ar' }: { locale?: Locale }) {
             <span className="status-pill">Multi-provider</span>
           </div>
         </Card>
-        <Card eyebrow={locale === 'ar' ? 'الجاهزية' : 'Readiness'} title={locale === 'ar' ? 'البنية الأساسية قيد البناء' : 'Foundation in progress'}>
+        <Card eyebrow={locale === 'ar' ? 'الجاهزية' : 'Readiness'} heading={locale === 'ar' ? 'البنية الأساسية قيد البناء' : 'Foundation in progress'}>
           <div className="metric"><strong>8</strong><span>{locale === 'ar' ? 'مسارات تنفيذ' : 'implementation tracks'}</span></div>
           <div className="metric"><strong>14</strong><span>{locale === 'ar' ? 'مساحة عمل' : 'workspaces'}</span></div>
         </Card>
       </section>
 
       <section className="capability-grid" aria-label={locale === 'ar' ? 'القدرات' : 'Capabilities'}>
-        {capabilityCards.map(([title, description]) => <Card key={title} title={title}><p>{description}</p></Card>)}
+        {capabilityCards.map(([title, description]) => <Card key={title} heading={title}><p>{description}</p></Card>)}
       </section>
     </AppShell>
   );
