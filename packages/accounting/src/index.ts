@@ -5,3 +5,4 @@ export * from './journals/validate-journal.js';
 export * from './journals/journal-service.js';
 export * from './reports/trial-balance-service.js';
 export * from './receivables/receivable-service.js';
+export * from './receivables/receivable-receipt-service.js';
