@@ -41,8 +41,8 @@ export function createTrialBalanceService(data: DataClient): TrialBalanceService
           code: accounts.code,
           nameAr: accounts.nameAr,
           type: accounts.type,
-          debitActivityMinor: sql<bigint>`sum(${journalLines.debitMinor})::bigint`,
-          creditActivityMinor: sql<bigint>`sum(${journalLines.creditMinor})::bigint`
+          debitActivityMinor: sql<string>`sum(${journalLines.debitMinor})::text`,
+          creditActivityMinor: sql<string>`sum(${journalLines.creditMinor})::text`
         })
           .from(journalLines)
           .innerJoin(accounts, and(
@@ -61,14 +61,17 @@ export function createTrialBalanceService(data: DataClient): TrialBalanceService
           .orderBy(accounts.code);
 
         const rows = activityRows.map<TrialBalanceRow>((row) => {
-          const netMinor = row.debitActivityMinor - row.creditActivityMinor;
+          const debitActivityMinor = BigInt(row.debitActivityMinor);
+          const creditActivityMinor = BigInt(row.creditActivityMinor);
+          const netMinor = debitActivityMinor - creditActivityMinor;
+
           return {
             accountId: row.accountId,
             code: row.code,
             nameAr: row.nameAr,
             type: row.type as AccountType,
-            debitActivityMinor: row.debitActivityMinor,
-            creditActivityMinor: row.creditActivityMinor,
+            debitActivityMinor,
+            creditActivityMinor,
             debitBalanceMinor: netMinor > 0n ? netMinor : 0n,
             creditBalanceMinor: netMinor < 0n ? -netMinor : 0n
           };
