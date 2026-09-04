@@ -28,7 +28,10 @@ jobs:
           --health-timeout 3s
           --health-retries 20
     env:
-      DATABASE_URL: postgres://new:new-local-only@127.0.0.1:5432/new
+      DATABASE_ADMIN_URL: postgres://new:new-local-only@127.0.0.1:5432/new
+      DATABASE_URL: postgres://new_app:new-app-local-only@127.0.0.1:5432/new
+      CI_APP_DB_ROLE: new_app
+      CI_APP_DB_PASSWORD: new-app-local-only
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -54,7 +57,12 @@ jobs:
         run: pnpm check:legacy-copy
 
       - name: Apply database migrations
+        env:
+          DATABASE_URL: ${{ env.DATABASE_ADMIN_URL }}
         run: pnpm --filter @new/data db:migrate
+
+      - name: Provision application database role
+        run: pnpm --filter @new/data db:ci-role
 
       - name: Lint
         run: pnpm lint
