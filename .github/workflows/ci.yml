@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - 'feat/**'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: new
+          POSTGRES_USER: new
+          POSTGRES_PASSWORD: new-local-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U new -d new"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 20
+    env:
+      DATABASE_URL: postgres://new:new-local-only@127.0.0.1:5432/new
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Check implementation plans
+        run: pnpm check:plans
+
+      - name: Guard against legacy bulk copies
+        run: pnpm check:legacy-copy
+
+      - name: Apply database migrations
+        run: pnpm --filter @new/data db:migrate
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Integration tests
+        run: pnpm test:integration
+
+      - name: Build
+        run: pnpm build
+
+      - name: Install Chromium
+        run: pnpm --filter @new/web exec playwright install --with-deps chromium
+
+      - name: Browser smoke tests
+        run: pnpm --filter @new/web test:e2e
