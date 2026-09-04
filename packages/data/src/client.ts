@@ -1,8 +1,11 @@
 import { sql } from 'drizzle-orm';
 import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import postgres, { type Sql } from 'postgres';
-import * as schema from './schema/core.js';
+import * as accountingSchema from './schema/accounting.js';
+import * as coreSchema from './schema/core.js';
 import type { TenantTransactionRunner } from './tenant-transaction.js';
+
+const schema = { ...coreSchema, ...accountingSchema };
 
 export type AppDatabase = PostgresJsDatabase<typeof schema>;
 export type AppTransaction = Parameters<Parameters<AppDatabase['transaction']>[0]>[0];
