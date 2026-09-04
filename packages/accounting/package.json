@@ -18,6 +18,7 @@
     "test:e2e": "vitest run --passWithNoTests"
   },
   "dependencies": {
+    "@new/data": "workspace:*",
     "@new/shared": "workspace:*"
   },
   "devDependencies": {
