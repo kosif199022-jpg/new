@@ -43,7 +43,7 @@ async function assertJournalAccounts(
   if (requireActive && rows.some((row) => !row.isActive)) throw new Error('account_inactive');
 }
 
-async function postWithinTransaction(
+export async function postJournalWithinTransaction(
   tx: AppTransaction,
   ctx: RequestContext,
   draft: JournalDraft,
@@ -108,7 +108,7 @@ export function createJournalService(data: DataClient): JournalService {
   return {
     async postJournal(ctx, draft) {
       assertPermission(ctx, 'accounting.post');
-      return withTenantTransaction(data.tenantRunner, ctx, (tx) => postWithinTransaction(tx, ctx, draft, {
+      return withTenantTransaction(data.tenantRunner, ctx, (tx) => postJournalWithinTransaction(tx, ctx, draft, {
         requireActive: true,
         auditAction: 'accounting.journal.posted'
       }));
@@ -152,7 +152,7 @@ export function createJournalService(data: DataClient): JournalService {
 
         if (originalLines.length < 2) throw new Error('journal_lines_missing');
 
-        return postWithinTransaction(tx, ctx, {
+        return postJournalWithinTransaction(tx, ctx, {
           currency: original.currency,
           memo: `عكس: ${original.memo} — ${reversalReason}`,
           reference: `REV-${original.reference}`,
