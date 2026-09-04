@@ -71,3 +71,22 @@ export const receivableInvoices = pgTable('receivable_invoices', {
   check('receivable_invoices_amount_positive_ck', sql`${table.amountMinor} > 0`),
   check('receivable_invoices_status_ck', sql`${table.status} = 'issued'`)
 ]);
+
+export const receivableReceipts = pgTable('receivable_receipts', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  tenantId: uuid('tenant_id').notNull().references(() => tenants.id, { onDelete: 'restrict' }),
+  invoiceId: uuid('invoice_id').notNull().references(() => receivableInvoices.id, { onDelete: 'restrict' }),
+  reference: text('reference').notNull(),
+  currency: text('currency').notNull(),
+  amountMinor: bigint('amount_minor', { mode: 'bigint' }).notNull(),
+  cashAccountId: uuid('cash_account_id').notNull().references(() => accounts.id, { onDelete: 'restrict' }),
+  journalId: uuid('journal_id').notNull().references(() => journalEntries.id, { onDelete: 'restrict' }),
+  receivedBy: uuid('received_by').notNull().references(() => users.id, { onDelete: 'restrict' }),
+  receivedAt: timestamp('received_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  correlationId: text('correlation_id').notNull()
+}, (table) => [
+  uniqueIndex('receivable_receipts_tenant_reference_uq').on(table.tenantId, table.reference),
+  uniqueIndex('receivable_receipts_journal_uq').on(table.journalId),
+  index('receivable_receipts_invoice_idx').on(table.tenantId, table.invoiceId, table.receivedAt),
+  check('receivable_receipts_amount_positive_ck', sql`${table.amountMinor} > 0`)
+]);
