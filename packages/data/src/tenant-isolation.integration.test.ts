@@ -34,6 +34,16 @@ suite('tenant row-level isolation', () => {
     await sql.end({ timeout: 5 });
   });
 
+  it('runs integration queries as a non-privileged application role', async () => {
+    const [role] = await sql<{ role_name: string; is_superuser: boolean; bypass_rls: boolean }[]>`
+      select current_user as role_name, rolsuper as is_superuser, rolbypassrls as bypass_rls
+      from pg_roles
+      where rolname = current_user
+    `;
+
+    expect(role).toMatchObject({ is_superuser: false, bypass_rls: false });
+  });
+
   it('restricts membership rows to the active tenant setting', async () => {
     const rows = await sql.begin(async (tx) => {
       await tx`select set_config('app.tenant_id', ${tenantA}, true)`;
